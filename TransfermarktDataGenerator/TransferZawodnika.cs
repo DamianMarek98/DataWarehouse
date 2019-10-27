@@ -14,21 +14,16 @@ namespace TransfermarktDataGenerator
     
     public partial class TransferZawodnika
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TransferZawodnika()
-        {
-            this.SprzedażKupnoZawodnika = new HashSet<SprzedażKupnoZawodnika>();
-        }
-    
         public int Id { get; set; }
         public System.DateTime DataTransferu { get; set; }
         public string TypPlatnosci { get; set; }
         public Nullable<int> KlubSprzedajacyId { get; set; }
         public Nullable<int> KlubKupujacyId { get; set; }
+        public Nullable<int> KwotaTransferu { get; set; }
+        public int ZawodnikId { get; set; }
     
         public virtual Klub Klub { get; set; }
         public virtual Klub Klub1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SprzedażKupnoZawodnika> SprzedażKupnoZawodnika { get; set; }
+        public virtual Zawodnik Zawodnik { get; set; }
     }
 }

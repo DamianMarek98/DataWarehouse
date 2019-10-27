@@ -23,8 +23,8 @@ namespace TransfermarktDataGenerator
             DataGenerator dataGenerator = new DataGenerator();
             //dataGenerator.generateNClubs(1000000);
             //dataGenerator.generateNAgents(1000000);
-            dataGenerator.generateNPlayers(1000000);
-
+            //dataGenerator.generateNPlayers(1000000);
+            dataGenerator.generatePlayersValues(new DateTime(1980, 6, 30));
             
             
         }

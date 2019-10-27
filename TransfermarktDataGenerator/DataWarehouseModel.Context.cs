@@ -27,7 +27,6 @@ namespace TransfermarktDataGenerator
     
         public virtual DbSet<Agent> Agent { get; set; }
         public virtual DbSet<Klub> Klub { get; set; }
-        public virtual DbSet<SprzedażKupnoZawodnika> SprzedażKupnoZawodnika { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TransferZawodnika> TransferZawodnika { get; set; }
         public virtual DbSet<WartoscZawodnika> WartoscZawodnika { get; set; }

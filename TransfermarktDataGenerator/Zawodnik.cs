@@ -17,8 +17,8 @@ namespace TransfermarktDataGenerator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Zawodnik()
         {
-            this.SprzedażKupnoZawodnika = new HashSet<SprzedażKupnoZawodnika>();
             this.WartoscZawodnika = new HashSet<WartoscZawodnika>();
+            this.TransferZawodnika = new HashSet<TransferZawodnika>();
         }
     
         public int Id { get; set; }
@@ -32,8 +32,8 @@ namespace TransfermarktDataGenerator
         public virtual Agent Agent { get; set; }
         public virtual Klub Klub { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SprzedażKupnoZawodnika> SprzedażKupnoZawodnika { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WartoscZawodnika> WartoscZawodnika { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TransferZawodnika> TransferZawodnika { get; set; }
     }
 }

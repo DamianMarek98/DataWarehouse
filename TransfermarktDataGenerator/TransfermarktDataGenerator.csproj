@@ -71,14 +71,10 @@
     </Compile>
     <Compile Include="Model\TAgent.cs" />
     <Compile Include="Model\TKlub.cs" />
-    <Compile Include="Model\TSprzedazKupnoZawodnika.cs" />
     <Compile Include="Model\TTransferZawodnika.cs" />
     <Compile Include="Model\TWartoscZawodnika.cs" />
     <Compile Include="Model\TZawodnik.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="SprzedażKupnoZawodnika.cs">
-      <DependentUpon>DataWarehouseModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>DataWarehouseModel.tt</DependentUpon>
     </Compile>

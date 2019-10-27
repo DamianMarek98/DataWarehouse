@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Agent">
           <Key>
             <PropertyRef Name="Id" />
@@ -19,17 +19,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nazwa" Type="varchar" MaxLength="30" />
-          <Property Name="Kraj" Type="varchar" MaxLength="30" />
+          <Property Name="Kraj" Type="varchar(max)" />
           <Property Name="Budżet" Type="int" />
-        </EntityType>
-        <EntityType Name="SprzedażKupnoZawodnika">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="KwotaTransferu" Type="int" />
-          <Property Name="ZawodnikId" Type="int" />
-          <Property Name="TransferId" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -50,6 +41,8 @@
           <Property Name="TypPlatnosci" Type="varchar" MaxLength="20" />
           <Property Name="KlubSprzedajacyId" Type="int" />
           <Property Name="KlubKupujacyId" Type="int" />
+          <Property Name="KwotaTransferu" Type="int" />
+          <Property Name="ZawodnikId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="WartoscZawodnika">
           <Key>
@@ -72,31 +65,7 @@
           <Property Name="KlubId" Type="int" />
           <Property Name="AgentId" Type="int" />
         </EntityType>
-        <Association Name="FK__SprzedażK__Trans__440B1D61">
-          <End Role="TransferZawodnika" Type="Self.TransferZawodnika" Multiplicity="0..1" />
-          <End Role="SprzedażKupnoZawodnika" Type="Self.SprzedażKupnoZawodnika" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TransferZawodnika">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SprzedażKupnoZawodnika">
-              <PropertyRef Name="TransferId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__SprzedażK__Zawod__4316F928">
-          <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="0..1" />
-          <End Role="SprzedażKupnoZawodnika" Type="Self.SprzedażKupnoZawodnika" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Zawodnik">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SprzedażKupnoZawodnika">
-              <PropertyRef Name="ZawodnikId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TransferZ__KlubK__3C69FB99">
+        <Association Name="FK__TransferZ__KlubK__59063A47">
           <End Role="Klub" Type="Self.Klub" Multiplicity="0..1" />
           <End Role="TransferZawodnika" Type="Self.TransferZawodnika" Multiplicity="*" />
           <ReferentialConstraint>
@@ -108,7 +77,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TransferZ__KlubS__3B75D760">
+        <Association Name="FK__TransferZ__KlubS__5812160E">
           <End Role="Klub" Type="Self.Klub" Multiplicity="0..1" />
           <End Role="TransferZawodnika" Type="Self.TransferZawodnika" Multiplicity="*" />
           <ReferentialConstraint>
@@ -120,7 +89,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WartoscZa__Zawod__46E78A0C">
+        <Association Name="FK__TransferZ__Zawod__6477ECF3">
+          <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="1" />
+          <End Role="TransferZawodnika" Type="Self.TransferZawodnika" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zawodnik">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransferZawodnika">
+              <PropertyRef Name="ZawodnikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__WartoscZa__Zawod__6383C8BA">
           <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="0..1" />
           <End Role="WartoscZawodnika" Type="Self.WartoscZawodnika" Multiplicity="*" />
           <ReferentialConstraint>
@@ -132,7 +113,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Zawodnik__AgentI__403A8C7D">
+        <Association Name="FK__Zawodnik__AgentI__5CD6CB2B">
           <End Role="Agent" Type="Self.Agent" Multiplicity="0..1" />
           <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="*" />
           <ReferentialConstraint>
@@ -144,7 +125,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Zawodnik__KlubId__3F466844">
+        <Association Name="FK__Zawodnik__KlubId__5BE2A6F2">
           <End Role="Klub" Type="Self.Klub" Multiplicity="0..1" />
           <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="*" />
           <ReferentialConstraint>
@@ -159,42 +140,36 @@
         <EntityContainer Name="DataWarehousesProjectModelStoreContainer">
           <EntitySet Name="Agent" EntityType="Self.Agent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Klub" EntityType="Self.Klub" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SprzedażKupnoZawodnika" EntityType="Self.SprzedażKupnoZawodnika" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferZawodnika" EntityType="Self.TransferZawodnika" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WartoscZawodnika" EntityType="Self.WartoscZawodnika" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zawodnik" EntityType="Self.Zawodnik" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__SprzedażK__Trans__440B1D61" Association="Self.FK__SprzedażK__Trans__440B1D61">
+          <AssociationSet Name="FK__TransferZ__KlubK__59063A47" Association="Self.FK__TransferZ__KlubK__59063A47">
+            <End Role="Klub" EntitySet="Klub" />
             <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
-            <End Role="SprzedażKupnoZawodnika" EntitySet="SprzedażKupnoZawodnika" />
           </AssociationSet>
-          <AssociationSet Name="FK__SprzedażK__Zawod__4316F928" Association="Self.FK__SprzedażK__Zawod__4316F928">
+          <AssociationSet Name="FK__TransferZ__KlubS__5812160E" Association="Self.FK__TransferZ__KlubS__5812160E">
+            <End Role="Klub" EntitySet="Klub" />
+            <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TransferZ__Zawod__6477ECF3" Association="Self.FK__TransferZ__Zawod__6477ECF3">
             <End Role="Zawodnik" EntitySet="Zawodnik" />
-            <End Role="SprzedażKupnoZawodnika" EntitySet="SprzedażKupnoZawodnika" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TransferZ__KlubK__3C69FB99" Association="Self.FK__TransferZ__KlubK__3C69FB99">
-            <End Role="Klub" EntitySet="Klub" />
             <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
           </AssociationSet>
-          <AssociationSet Name="FK__TransferZ__KlubS__3B75D760" Association="Self.FK__TransferZ__KlubS__3B75D760">
-            <End Role="Klub" EntitySet="Klub" />
-            <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
-          </AssociationSet>
-          <AssociationSet Name="FK__WartoscZa__Zawod__46E78A0C" Association="Self.FK__WartoscZa__Zawod__46E78A0C">
+          <AssociationSet Name="FK__WartoscZa__Zawod__6383C8BA" Association="Self.FK__WartoscZa__Zawod__6383C8BA">
             <End Role="Zawodnik" EntitySet="Zawodnik" />
             <End Role="WartoscZawodnika" EntitySet="WartoscZawodnika" />
           </AssociationSet>
-          <AssociationSet Name="FK__Zawodnik__AgentI__403A8C7D" Association="Self.FK__Zawodnik__AgentI__403A8C7D">
+          <AssociationSet Name="FK__Zawodnik__AgentI__5CD6CB2B" Association="Self.FK__Zawodnik__AgentI__5CD6CB2B">
             <End Role="Agent" EntitySet="Agent" />
             <End Role="Zawodnik" EntitySet="Zawodnik" />
           </AssociationSet>
-          <AssociationSet Name="FK__Zawodnik__KlubId__3F466844" Association="Self.FK__Zawodnik__KlubId__3F466844">
+          <AssociationSet Name="FK__Zawodnik__KlubId__5BE2A6F2" Association="Self.FK__Zawodnik__KlubId__5BE2A6F2">
             <End Role="Klub" EntitySet="Klub" />
             <End Role="Zawodnik" EntitySet="Zawodnik" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataWarehousesProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -213,22 +188,11 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nazwa" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Kraj" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Kraj" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Budżet" Type="Int32" />
           <NavigationProperty Name="TransferZawodnika" Relationship="Self.FK__TransferZ__KlubK__3C69FB99" FromRole="Klub" ToRole="TransferZawodnika" />
           <NavigationProperty Name="TransferZawodnika1" Relationship="Self.FK__TransferZ__KlubS__3B75D760" FromRole="Klub" ToRole="TransferZawodnika" />
           <NavigationProperty Name="Zawodnik" Relationship="Self.FK__Zawodnik__KlubId__3F466844" FromRole="Klub" ToRole="Zawodnik" />
-        </EntityType>
-        <EntityType Name="SprzedażKupnoZawodnika">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KwotaTransferu" Type="Int32" />
-          <Property Name="ZawodnikId" Type="Int32" />
-          <Property Name="TransferId" Type="Int32" />
-          <NavigationProperty Name="TransferZawodnika" Relationship="Self.FK__SprzedażK__Trans__440B1D61" FromRole="SprzedażKupnoZawodnika" ToRole="TransferZawodnika" />
-          <NavigationProperty Name="Zawodnik" Relationship="Self.FK__SprzedażK__Zawod__4316F928" FromRole="SprzedażKupnoZawodnika" ToRole="Zawodnik" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -251,7 +215,9 @@
           <Property Name="KlubKupujacyId" Type="Int32" />
           <NavigationProperty Name="Klub" Relationship="Self.FK__TransferZ__KlubK__3C69FB99" FromRole="TransferZawodnika" ToRole="Klub" />
           <NavigationProperty Name="Klub1" Relationship="Self.FK__TransferZ__KlubS__3B75D760" FromRole="TransferZawodnika" ToRole="Klub" />
-          <NavigationProperty Name="SprzedażKupnoZawodnika" Relationship="Self.FK__SprzedażK__Trans__440B1D61" FromRole="TransferZawodnika" ToRole="SprzedażKupnoZawodnika" />
+          <Property Name="KwotaTransferu" Type="Int32" />
+          <Property Name="ZawodnikId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Zawodnik" Relationship="DataWarehousesProjectModel.FK__TransferZ__Zawod__6477ECF3" FromRole="TransferZawodnika" ToRole="Zawodnik" />
         </EntityType>
         <EntityType Name="WartoscZawodnika">
           <Key>
@@ -276,8 +242,8 @@
           <Property Name="AgentId" Type="Int32" />
           <NavigationProperty Name="Agent" Relationship="Self.FK__Zawodnik__AgentI__403A8C7D" FromRole="Zawodnik" ToRole="Agent" />
           <NavigationProperty Name="Klub" Relationship="Self.FK__Zawodnik__KlubId__3F466844" FromRole="Zawodnik" ToRole="Klub" />
-          <NavigationProperty Name="SprzedażKupnoZawodnika" Relationship="Self.FK__SprzedażK__Zawod__4316F928" FromRole="Zawodnik" ToRole="SprzedażKupnoZawodnika" />
           <NavigationProperty Name="WartoscZawodnika" Relationship="Self.FK__WartoscZa__Zawod__46E78A0C" FromRole="Zawodnik" ToRole="WartoscZawodnika" />
+          <NavigationProperty Name="TransferZawodnika" Relationship="DataWarehousesProjectModel.FK__TransferZ__Zawod__6477ECF3" FromRole="Zawodnik" ToRole="TransferZawodnika" />
         </EntityType>
         <Association Name="FK__Zawodnik__AgentI__403A8C7D">
           <End Role="Agent" Type="Self.Agent" Multiplicity="0..1" />
@@ -327,30 +293,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SprzedażK__Trans__440B1D61">
-          <End Role="TransferZawodnika" Type="Self.TransferZawodnika" Multiplicity="0..1" />
-          <End Role="SprzedażKupnoZawodnika" Type="Self.SprzedażKupnoZawodnika" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TransferZawodnika">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SprzedażKupnoZawodnika">
-              <PropertyRef Name="TransferId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__SprzedażK__Zawod__4316F928">
-          <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="0..1" />
-          <End Role="SprzedażKupnoZawodnika" Type="Self.SprzedażKupnoZawodnika" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Zawodnik">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SprzedażKupnoZawodnika">
-              <PropertyRef Name="ZawodnikId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__WartoscZa__Zawod__46E78A0C">
           <End Role="Zawodnik" Type="Self.Zawodnik" Multiplicity="0..1" />
           <End Role="WartoscZawodnika" Type="Self.WartoscZawodnika" Multiplicity="*" />
@@ -366,7 +308,6 @@
         <EntityContainer Name="DataWarehousesProjectEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Agent" EntityType="Self.Agent" />
           <EntitySet Name="Klub" EntityType="Self.Klub" />
-          <EntitySet Name="SprzedażKupnoZawodnika" EntityType="Self.SprzedażKupnoZawodnika" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="TransferZawodnika" EntityType="Self.TransferZawodnika" />
           <EntitySet Name="WartoscZawodnika" EntityType="Self.WartoscZawodnika" />
@@ -387,19 +328,27 @@
             <End Role="Klub" EntitySet="Klub" />
             <End Role="Zawodnik" EntitySet="Zawodnik" />
           </AssociationSet>
-          <AssociationSet Name="FK__SprzedażK__Trans__440B1D61" Association="Self.FK__SprzedażK__Trans__440B1D61">
-            <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
-            <End Role="SprzedażKupnoZawodnika" EntitySet="SprzedażKupnoZawodnika" />
-          </AssociationSet>
-          <AssociationSet Name="FK__SprzedażK__Zawod__4316F928" Association="Self.FK__SprzedażK__Zawod__4316F928">
-            <End Role="Zawodnik" EntitySet="Zawodnik" />
-            <End Role="SprzedażKupnoZawodnika" EntitySet="SprzedażKupnoZawodnika" />
-          </AssociationSet>
           <AssociationSet Name="FK__WartoscZa__Zawod__46E78A0C" Association="Self.FK__WartoscZa__Zawod__46E78A0C">
             <End Role="Zawodnik" EntitySet="Zawodnik" />
             <End Role="WartoscZawodnika" EntitySet="WartoscZawodnika" />
           </AssociationSet>
+          <AssociationSet Name="FK__TransferZ__Zawod__6477ECF3" Association="DataWarehousesProjectModel.FK__TransferZ__Zawod__6477ECF3">
+            <End Role="Zawodnik" EntitySet="Zawodnik" />
+            <End Role="TransferZawodnika" EntitySet="TransferZawodnika" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK__TransferZ__Zawod__6477ECF3">
+          <End Type="DataWarehousesProjectModel.Zawodnik" Role="Zawodnik" Multiplicity="1" />
+          <End Type="DataWarehousesProjectModel.TransferZawodnika" Role="TransferZawodnika" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zawodnik">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransferZawodnika">
+              <PropertyRef Name="ZawodnikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -425,16 +374,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SprzedażKupnoZawodnika">
-            <EntityTypeMapping TypeName="DataWarehousesProjectModel.SprzedażKupnoZawodnika">
-              <MappingFragment StoreEntitySet="SprzedażKupnoZawodnika">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KwotaTransferu" ColumnName="KwotaTransferu" />
-                <ScalarProperty Name="ZawodnikId" ColumnName="ZawodnikId" />
-                <ScalarProperty Name="TransferId" ColumnName="TransferId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="DataWarehousesProjectModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -449,6 +388,8 @@
           <EntitySetMapping Name="TransferZawodnika">
             <EntityTypeMapping TypeName="DataWarehousesProjectModel.TransferZawodnika">
               <MappingFragment StoreEntitySet="TransferZawodnika">
+                <ScalarProperty Name="ZawodnikId" ColumnName="ZawodnikId" />
+                <ScalarProperty Name="KwotaTransferu" ColumnName="KwotaTransferu" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DataTransferu" ColumnName="DataTransferu" />
                 <ScalarProperty Name="TypPlatnosci" ColumnName="TypPlatnosci" />
