@@ -68,6 +68,19 @@ namespace TransfermarktDataGenerator
             return zawodnik;
         }
 
+        private TTransferZawodnika generateTransfer(Zawodnik player, DateTime date, int newClubId, int price)
+        {
+            TTransferZawodnika transfer = new TTransferZawodnika();
+            transfer.DataTransferu = date;
+            transfer.KlubKupujacyId = newClubId;
+            transfer.KlubSprzedajacyId = player.KlubId;
+            transfer.KwotaTransferu = price;
+            transfer.TypPlatnosci = getRandomPaymentType();
+            transfer.ZawodnikId = player.Id;
+
+            return transfer;
+        }
+
         private DateTime generateDateTime(DateTime from, DateTime to)
         {
             int range = (to - from).Days;
@@ -215,6 +228,83 @@ namespace TransfermarktDataGenerator
             using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))
             {
                 bulk.DestinationTableName = "WartoscZawodnika";
+                bulk.WriteToServer(table);
+            }
+        }
+
+        public void generateNTransfers(int n, DateTime date)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Int32));
+            table.Columns.Add("DataWystawienia", typeof(DateTime));
+            table.Columns.Add("TypPlatnosci", typeof(string));
+            table.Columns.Add("KlubSprzedajacyId", typeof(Int32));
+            table.Columns.Add("KlubKupujacyId", typeof(Int32));
+            table.Columns.Add("KwotaTransferu", typeof(Int32));
+            table.Columns.Add("ZawodnikId", typeof(Int32));
+
+            int maxClubId = getClubMaxId(), minClubId = getClubMinId();
+            int maxPlayerId = getPlayerMaxId(), minPlayerId = getPlayerMinId();
+
+            List<Zawodnik> players = new List<Zawodnik>();
+            List<Zawodnik> updatedPlayers = new List<Zawodnik>();
+            List<WartoscZawodnika> prices = new List<WartoscZawodnika>();
+
+            using(var dbContext = new DataWarehousesProjectEntities())
+            {
+                players = dbContext.Zawodnik.AsNoTracking().ToList();
+                prices = dbContext.WartoscZawodnika.AsNoTracking().ToList();
+               
+
+                for(int i = minPlayerId; i< minPlayerId+n; i++) //n cannot be greater than number of players
+                {
+                    if (i > n + minPlayerId) break;
+                    Zawodnik player = players.Where(x => x.Id == i).FirstOrDefault();
+
+                    int newClubId = random.Next(minClubId, maxClubId), price;
+                    if (newClubId == player.KlubId) newClubId++;
+                    int playerAge = date.Year - player.DataUrodzenia.Year;
+
+                    //check for the closest value
+                    int playerValue = prices.Where(x => x.ZawodnikId == player.Id).FirstOrDefault().WartoscRynkowa.GetValueOrDefault(); //co jak są dwie wartości
+
+                    if(playerAge < 23)
+                    {
+                        price = random.Next(9/10*playerValue, 3/2*playerValue);
+                    }
+                    else if(playerAge > 32)
+                    {
+                        price = random.Next(1/2 * playerValue, playerValue);
+                    }
+                    else
+                    {
+                        price = random.Next(7 / 10 * playerValue, 13 / 10 * playerValue);
+                    }
+
+
+                    var transfer = generateTransfer(player, date, newClubId, price);
+                    table.Rows.Add(transfer.Id, transfer.DataTransferu, transfer.TypPlatnosci, transfer.KlubSprzedajacyId, transfer.KlubKupujacyId, transfer.KwotaTransferu, transfer.ZawodnikId);
+                    player.KlubId = transfer.KlubKupujacyId;
+                    //Console.WriteLine(i.ToString());
+                    updatedPlayers.Add(player);
+                }
+
+                foreach(var player in updatedPlayers)
+                {
+                    Console.WriteLine(player.Id.ToString());
+                    var playerToUpadate = dbContext.Zawodnik.Where(x => x.Id == player.Id).FirstOrDefault(); //too long 
+                    if (player.KlubId != playerToUpadate.KlubId)
+                    {
+                        playerToUpadate.KlubId = player.KlubId;
+                    }
+                    dbContext.SaveChanges();
+                }
+               
+            }
+
+            using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))
+            {
+                bulk.DestinationTableName = "TransferZawodnika";
                 bulk.WriteToServer(table);
             }
         }

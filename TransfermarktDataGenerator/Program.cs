@@ -16,17 +16,25 @@ namespace TransfermarktDataGenerator
 {
     class Program
     {
-        private const string URL = "https://api-football-v1.p.rapidapi.com/v2/teams/team/33";
-        static Random random = new Random();
         static void Main(string[] args)
         {
+            createDataBetweenTwoTimeMoments(new DateTime(2017, 6, 30), new DateTime(2018, 1, 30), 500000);
+        }
+
+        static public void createDataBetweenTwoTimeMoments(DateTime T1, DateTime T2, int amount) //amount of player, clubs etc generated records not less than 1000 now
+        {
             DataGenerator dataGenerator = new DataGenerator();
-            //dataGenerator.generateNClubs(1000000);
-            //dataGenerator.generateNAgents(1000000);
-            //dataGenerator.generateNPlayers(1000000);
-            dataGenerator.generatePlayersValues(new DateTime(1980, 6, 30));
-            
-            
+            dataGenerator.generateNClubs(amount);
+            dataGenerator.generateNAgents(amount);
+            dataGenerator.generateNPlayers(amount);
+            dataGenerator.generatePlayersValues(T1);
+            dataGenerator.generateNTransfers(1000, T1);
+            //second portind of data
+            dataGenerator.generateNClubs(amount);
+            dataGenerator.generateNAgents(amount);
+            dataGenerator.generateNPlayers(amount);
+            dataGenerator.generatePlayersValues(T2);
+            dataGenerator.generateNTransfers(1000, T2);
         }
     }
 }
