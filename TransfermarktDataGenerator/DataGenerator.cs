@@ -334,12 +334,15 @@ namespace TransfermarktDataGenerator
 
                 foreach(var player in updatedPlayers)
                 {
-                    var playerToUpadate = dbContext.Zawodnik.AsNoTracking().Where(x => x.Id == player.Id).FirstOrDefault(); 
+                    var playerToUpadate = dbContext.Zawodnik.Where(x => x.Id == player.Id).FirstOrDefault(); 
                     if (player.KlubId != playerToUpadate.KlubId)
                     {
+                        Console.WriteLine("was: " + playerToUpadate.KlubId.ToString());
                         playerToUpadate.KlubId = player.KlubId;
+                        Console.WriteLine("Should be: " + playerToUpadate.KlubId.ToString());
                     }
                     dbContext.SaveChanges();
+
                 }
                
             }
