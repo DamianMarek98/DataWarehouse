@@ -17,10 +17,10 @@ namespace TransfermarktDataGenerator
         static Random random = new Random();
         public DataGenerator()
         {
-            String baseFilePath = @"C:\Users\Public\Documents\Devart\dbForge Data Generator for SQL Server\Data Generators\";
+            String baseFilePath = @"..\..\txtFiles\";
             names = System.IO.File.ReadLines(baseFilePath+"FirstNamesMale.txt").ToList();
             surnames = System.IO.File.ReadLines(baseFilePath + "LastNames.txt").ToList();
-            countries = System.IO.File.ReadLines(@"C:\Users\Deny\Desktop\Studia\V Sem\DataWarehouses\Countries.txt").ToList();
+            countries = System.IO.File.ReadLines(baseFilePath+"Countries.txt").ToList();
         }
 
         private void generateXAgents(int x)
@@ -50,6 +50,15 @@ namespace TransfermarktDataGenerator
         {
             TWartoscZawodnika value = new TWartoscZawodnika();
             value.WartoscRynkowa = random.Next(1, 100000000);
+            value.DataWystawienia = date;
+            value.ZawodnikId = playerId;
+            return value;
+        }
+
+        private TWartoscZawodnika generateValueBasedOnLastOne(int playerId, DateTime date, int oldValue)
+        {
+            TWartoscZawodnika value = new TWartoscZawodnika();
+            value.WartoscRynkowa = random.Next(oldValue/2, oldValue*3/2);
             value.DataWystawienia = date;
             value.ZawodnikId = playerId;
             return value;
@@ -198,7 +207,6 @@ namespace TransfermarktDataGenerator
             {
                 var player = generateZawodnik(minAgentId, maxAgentId, maxClubId, minClubId);
                 table.Rows.Add(player.Id, player.Imię, player.Nazwisko, player.DataUrodzenia, player.Pozycja, player.KlubId, player.AgentId);
-                //Console.WriteLine("Added player number:" + i.ToString());
             }
 
             using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))
@@ -215,15 +223,33 @@ namespace TransfermarktDataGenerator
             table.Columns.Add("WartośćRynkowa", typeof(Int32));
             table.Columns.Add("DataWystawienia", typeof(DateTime));
             table.Columns.Add("ZawodnikId", typeof(Int32));
-
+            List<TWartoscZawodnika> playersValues = new List<TWartoscZawodnika>();
             int minPlayerId = getPlayerMinId(), maxPlayerId = getPlayerMaxId();
 
-            for (int i = minPlayerId; i < maxPlayerId; i++)
+            using (var dbContext = new DataWarehousesProjectEntities())
             {
-                //here to do!
-                var value = generateValue(i, time);
-                table.Rows.Add(value.Id, value.WartoscRynkowa, value.DataWystawienia, value.ZawodnikId);
+                var prices = dbContext.WartoscZawodnika.AsNoTracking().ToList();
+
+                for (int i = minPlayerId; i <= maxPlayerId; i++)
+                {
+                    TWartoscZawodnika value;
+                    if (prices.Count() > 0)
+                    {
+                        var playerValuesBeforeDate = prices.Where(x => x.ZawodnikId == i && x.DataWystawienia <= time).ToList();
+                        var player = playerValuesBeforeDate.OrderByDescending(x => x.DataWystawienia).First();
+                        prices.Remove(player);
+                        value = generateValueBasedOnLastOne(i, time, player.WartoscRynkowa.GetValueOrDefault());
+                    }
+                    else
+                    {
+                        value = generateValue(i, time);
+                    }
+                    
+                    playersValues.Add(value);
+                    table.Rows.Add(value.Id, value.WartoscRynkowa, value.DataWystawienia, value.ZawodnikId);
+                }
             }
+            
 
             using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))
             {
@@ -254,45 +280,61 @@ namespace TransfermarktDataGenerator
             {
                 players = dbContext.Zawodnik.AsNoTracking().ToList();
                 prices = dbContext.WartoscZawodnika.AsNoTracking().ToList();
-               
 
-                for(int i = minPlayerId; i< minPlayerId+n; i++) //n cannot be greater than number of players
+                int playerId;
+                List<int> playerTransferred = new List<int>();
+
+                for(int i = 0; i<n; i++) //n cannot be greater than number of players
                 {
-                    if (i > n + minPlayerId) break;
-                    Zawodnik player = players.Where(x => x.Id == i).FirstOrDefault();
+                    do
+                    {
+                        playerId = random.Next(minPlayerId, maxPlayerId);
+                    } while (playerTransferred.Contains(playerId)); //give us random player to transfer
+                    playerTransferred.Add(playerId);
+
+                    Zawodnik player = players.Where(x => x.Id == playerId).FirstOrDefault();
 
                     int newClubId = random.Next(minClubId, maxClubId), price;
                     if (newClubId == player.KlubId) newClubId++;
                     int playerAge = date.Year - player.DataUrodzenia.Year;
 
-                    //check for the closest value
-                    int playerValue = prices.Where(x => x.ZawodnikId == player.Id).FirstOrDefault().WartoscRynkowa.GetValueOrDefault(); //co jak są dwie wartości
+                    //was faster but can cause stupid results
+                    //int playerValue = prices.Where(x => x.ZawodnikId == player.Id).FirstOrDefault().WartoscRynkowa.GetValueOrDefault();
+                    
+                    //works too slow 
+                    var playerValuesBeforeDate = prices.Where(x => x.ZawodnikId == player.Id && x.DataWystawienia <= date).ToList();
+                    int playerValue = playerValuesBeforeDate.OrderByDescending(x => x.DataWystawienia).First().WartoscRynkowa.GetValueOrDefault();         
 
-                    if(playerAge < 23)
+                    if (playerAge < 23)
                     {
-                        price = random.Next(9/10*playerValue, 3/2*playerValue);
+                        price = random.Next(playerValue,2*playerValue);
                     }
                     else if(playerAge > 32)
                     {
-                        price = random.Next(1/2 * playerValue, playerValue);
+                        price = random.Next(playerValue/3, playerValue);
                     }
                     else
                     {
-                        price = random.Next(7 / 10 * playerValue, 13 / 10 * playerValue);
+                        price = random.Next(playerValue/2, 3*playerValue/2);
                     }
 
 
                     var transfer = generateTransfer(player, date, newClubId, price);
-                    table.Rows.Add(transfer.Id, transfer.DataTransferu, transfer.TypPlatnosci, transfer.KlubSprzedajacyId, transfer.KlubKupujacyId, transfer.KwotaTransferu, transfer.ZawodnikId);
-                    player.KlubId = transfer.KlubKupujacyId;
-                    //Console.WriteLine(i.ToString());
+                    int days = random.Next(0, 30);
+                    DateTime transferDate = transfer.DataTransferu.AddDays(days);
+                    if (days > 20 && days < 29) transfer.KwotaTransferu += transfer.KwotaTransferu / 20; //+5% of value
+                    else if (days > 28) transfer.KwotaTransferu += transfer.KwotaTransferu / 10; //+10% of value
+
+
+                    table.Rows.Add(transfer.Id, transferDate, transfer.TypPlatnosci, transfer.KlubSprzedajacyId, transfer.KlubKupujacyId, transfer.KwotaTransferu, transfer.ZawodnikId);
+                    player.KlubId = transfer.KlubKupujacyId;                  
                     updatedPlayers.Add(player);
                 }
 
+
                 foreach(var player in updatedPlayers)
                 {
-                    Console.WriteLine(player.Id.ToString());
-                    var playerToUpadate = dbContext.Zawodnik.Where(x => x.Id == player.Id).FirstOrDefault(); //too long 
+                    var playerToUpadate = dbContext.Zawodnik.AsNoTracking().Where(x => x.Id == player.Id).FirstOrDefault(); 
                     if (player.KlubId != playerToUpadate.KlubId)
                     {
                         playerToUpadate.KlubId = player.KlubId;
@@ -314,7 +356,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var playerId = dbContext.Zawodnik.Max(x => x.Id);
+                var playerId = dbContext.Zawodnik.AsNoTracking().Max(x => x.Id);
                 return playerId;
             }
         }
@@ -323,7 +365,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var playerId = dbContext.Zawodnik.Min(x => x.Id);
+                var playerId = dbContext.Zawodnik.AsNoTracking().Min(x => x.Id);
                 return playerId;
             }
         }
@@ -332,7 +374,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var clubId = dbContext.Klub.Max(x => x.Id);
+                var clubId = dbContext.Klub.AsNoTracking().Max(x => x.Id);
                 return clubId;
             }
         }
@@ -341,7 +383,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var clubId = dbContext.Klub.Min(x => x.Id);
+                var clubId = dbContext.Klub.AsNoTracking().Min(x => x.Id);
                 return clubId;
             }
         }
@@ -350,7 +392,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var agentId = dbContext.Agent.Max(x => x.Id);
+                var agentId = dbContext.Agent.AsNoTracking().Max(x => x.Id);
                 return agentId;
             }
         }
@@ -359,7 +401,7 @@ namespace TransfermarktDataGenerator
         {
             using (var dbContext = new DataWarehousesProjectEntities())
             {
-                var agentId = dbContext.Agent.Min(x => x.Id);
+                var agentId = dbContext.Agent.AsNoTracking().Min(x => x.Id);
                 return agentId;
             }
         }

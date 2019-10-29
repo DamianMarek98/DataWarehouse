@@ -18,23 +18,23 @@ namespace TransfermarktDataGenerator
     {
         static void Main(string[] args)
         {
-            createDataBetweenTwoTimeMoments(new DateTime(2017, 6, 30), new DateTime(2018, 1, 30), 500000);
+            CreateDataBetweenTwoTimeMoments(new DateTime(2017, 6, 30), new DateTime(2018, 1, 1), 125000); //now generating milion of records toogether in between T1 and T2 + 7500 transfers (the longest operation)
         }
 
-        static public void createDataBetweenTwoTimeMoments(DateTime T1, DateTime T2, int amount) //amount of player, clubs etc generated records not less than 1000 now
+        static public void CreateDataBetweenTwoTimeMoments(DateTime T1, DateTime T2, int amount) 
         {
             DataGenerator dataGenerator = new DataGenerator();
             dataGenerator.generateNClubs(amount);
             dataGenerator.generateNAgents(amount);
             dataGenerator.generateNPlayers(amount);
             dataGenerator.generatePlayersValues(T1);
-            dataGenerator.generateNTransfers(1000, T1);
-            //second portind of data
+            dataGenerator.generateNTransfers(2500, T1);
+            //T2 moment data
             dataGenerator.generateNClubs(amount);
             dataGenerator.generateNAgents(amount);
             dataGenerator.generateNPlayers(amount);
             dataGenerator.generatePlayersValues(T2);
-            dataGenerator.generateNTransfers(1000, T2);
+            dataGenerator.generateNTransfers(5000, T2);
         }
     }
 }
