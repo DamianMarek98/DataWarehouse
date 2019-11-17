@@ -1,0 +1,10 @@
+delete from kontrakt
+
+delete from TransferZawodnika
+delete from WartoscZawodnika
+delete from Zawodnik
+delete from Agent
+delete from czas 
+delete from Dzien
+delete from Smieci
+delete from klub

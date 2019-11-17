@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="43cc74ba200d420d85eff8cefb4b2b7b" Name="Diagram1">
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.Agent" Width="1.5" PointX="4.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.Klub" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.TransferZawodnika" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.WartoscZawodnika" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataWarehousesProjectModel.Zawodnik" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__Zawodnik__AgentI__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__TransferZ__KlubK__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__TransferZ__KlubS__5812160E" ManuallyRouted="false" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__Zawodnik__KlubId__5BE2A6F2" ManuallyRouted="false" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__TransferZ__Zawod__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="DataWarehousesProjectModel.FK__WartoscZa__Zawod__6383C8BA" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11B81AE0-7A14-406A-A062-23504A0F31B4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DataWarehouseGenerator</RootNamespace>
+    <AssemblyName>DataWarehouseGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="DataWarehouseProjectModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataWarehouseProjectModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataWarehouseProjectModel.edmx.diagram">
+      <DependentUpon>DataWarehouseProjectModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Agent.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CSVReader.cs" />
+    <Compile Include="DataWarehouseProjectModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataWarehouseProjectModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataWarehouseProjectModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataWarehouseProjectModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataWarehouseProjectModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="InsertGenerator.cs" />
+    <Compile Include="Klub.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Agent.cs" />
+    <Compile Include="Model\ContractVariables.cs" />
+    <Compile Include="Model\Czas.cs" />
+    <Compile Include="Model\Dzien.cs" />
+    <Compile Include="Model\Klub.cs" />
+    <Compile Include="Model\Kontrakt.cs" />
+    <Compile Include="Model\PlayerContractFullInfo.cs" />
+    <Compile Include="Model\PlayerInfo.cs" />
+    <Compile Include="Model\Smieci.cs" />
+    <Compile Include="Model\TransferZawodnika.cs" />
+    <Compile Include="Model\WartoscZawodnika.cs" />
+    <Compile Include="Model\Zawodnik.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransferZawodnika.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WartoscZawodnika.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Zawodnik.cs">
+      <DependentUpon>DataWarehouseProjectModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>packages\CsvHelper.12.2.1\lib\net47\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataWarehouseProjectModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DataWarehouseProjectModel.Context.cs</LastGenOutput>
+      <DependentUpon>DataWarehouseProjectModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="DataWarehouseProjectModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DataWarehouseProjectModel.edmx</DependentUpon>
+      <LastGenOutput>DataWarehouseProjectModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
