@@ -47,7 +47,7 @@ namespace TransfermarktDataGenerator
         }
 
         private TWartoscZawodnika generateValue(int playerId, DateTime date)
-        {
+        {       
             TWartoscZawodnika value = new TWartoscZawodnika();
             value.WartoscRynkowa = random.Next(1, 100000000);
             value.DataWystawienia = date;
@@ -73,6 +73,8 @@ namespace TransfermarktDataGenerator
             zawodnik.DataUrodzenia = generateDateTime(new DateTime(1980, 1, 1), new DateTime(2003, 1, 1));
             zawodnik.AgentId = random.Next(minAgentId, maxAgentId);
             zawodnik.KlubId = random.Next(minClubId, maxClubId);
+            var data = zawodnik.DataUrodzenia.ToString("yyyyMMdd");
+            zawodnik.pesel = data;
 
             return zawodnik;
         }
@@ -200,13 +202,14 @@ namespace TransfermarktDataGenerator
             table.Columns.Add("Pozycja", typeof(string));
             table.Columns.Add("KlubId", typeof(Int32));
             table.Columns.Add("AgentId", typeof(Int32));
+            table.Columns.Add("pesel", typeof(string));
 
             int maxAgentId = getAgentMaxId(), minAgentId = getAgentMinId(), maxClubId = getClubMaxId(), minClubId = getClubMinId();
 
             for (int i = 0; i < n; i++)
             {
-                var player = generateZawodnik(minAgentId, maxAgentId, maxClubId, minClubId);
-                table.Rows.Add(player.Id, player.Imię, player.Nazwisko, player.DataUrodzenia, player.Pozycja, player.KlubId, player.AgentId);
+                var player = generateZawodnik(minAgentId, maxAgentId, maxClubId, minClubId);     
+                table.Rows.Add(player.Id, player.Imię, player.Nazwisko, player.DataUrodzenia, player.Pozycja, player.KlubId, player.AgentId, player.pesel);
             }
 
             using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))

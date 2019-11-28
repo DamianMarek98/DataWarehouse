@@ -18,9 +18,9 @@ namespace TransfermarktDataGenerator
     {
         static void Main(string[] args)
         {
-            //CreateDataBetweenTwoTimeMoments(new DateTime(2017, 6, 30), new DateTime(2018, 1, 1), 10000); //now generating milion of records toogether in between T1 and T2 + 7500 transfers (the longest operation)
-            DataGenerator dataGenerator = new DataGenerator();
-            dataGenerator.generateNTransfers(1, new DateTime(2020, 6, 30));
+            CreateDataBetweenTwoTimeMoments(new DateTime(2017, 6, 30), new DateTime(2018, 1, 1), 10000); //now generating milion of records toogether in between T1 and T2 + 7500 transfers (the longest operation)
+            //DataGenerator dataGenerator = new DataGenerator();
+            //dataGenerator.generateNTransfers(1, new DateTime(2020, 6, 30));
         }
 
         static public void CreateDataBetweenTwoTimeMoments(DateTime T1, DateTime T2, int amount) 
@@ -39,6 +39,17 @@ namespace TransfermarktDataGenerator
             dataGenerator.generateNPlayers(amount);
             dataGenerator.generatePlayersValues(T2);
             dataGenerator.generateNTransfers(1000, T2);
+
+            //in the end get all players iterate through all of them and: player.pesel += player.Id.ToString();
+            using (var dbContext = new DataWarehousesProjectEntities())
+            {
+                List<Zawodnik> listOfPlayers = dbContext.Zawodnik.ToList();
+                foreach(Zawodnik zawodnik in listOfPlayers)
+                {
+                    zawodnik.pesel += zawodnik.Id.ToString();
+                }
+                dbContext.SaveChanges();
+            }
         }
     }
 }

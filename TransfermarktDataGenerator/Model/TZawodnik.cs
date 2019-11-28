@@ -15,5 +15,7 @@ namespace TransfermarktDataGenerator.Model
         public string Pozycja { get; set; }
         public Nullable<int> KlubId { get; set; }
         public Nullable<int> AgentId { get; set; }
+
+        public string pesel { get; set; }
     }
 }
