@@ -50,6 +50,16 @@ namespace TransfermarktDataGenerator
                 }
                 dbContext.SaveChanges();
             }
+            //same with agents
+            using (var dbContext = new DataWarehousesProjectEntities())
+            {
+                List<Agent> listOfAgents = dbContext.Agent.ToList();
+                foreach (Agent agent in listOfAgents)
+                {
+                    agent.pesel += agent.Id.ToString();
+                }
+                dbContext.SaveChanges();
+            }
         }
     }
 }

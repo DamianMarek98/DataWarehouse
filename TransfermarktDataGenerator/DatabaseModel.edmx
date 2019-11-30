@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Agent">
           <Key>
             <PropertyRef Name="Id" />
@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Imię" Type="varchar" MaxLength="50" />
           <Property Name="Nazwisko" Type="varchar" MaxLength="50" />
+          <Property Name="pesel" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Klub">
           <Key>
@@ -170,8 +171,7 @@
             <End Role="Zawodnik" EntitySet="Zawodnik" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataWarehousesProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -183,6 +183,7 @@
           <Property Name="Imię" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Zawodnik" Relationship="Self.FK__Zawodnik__AgentI__5CD6CB2B" FromRole="Agent" ToRole="Zawodnik" />
+          <Property Name="pesel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Klub">
           <Key>
@@ -361,6 +362,7 @@
           <EntitySetMapping Name="Agent">
             <EntityTypeMapping TypeName="DataWarehousesProjectModel.Agent">
               <MappingFragment StoreEntitySet="Agent">
+                <ScalarProperty Name="pesel" ColumnName="pesel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Imię" ColumnName="Imię" />
                 <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />

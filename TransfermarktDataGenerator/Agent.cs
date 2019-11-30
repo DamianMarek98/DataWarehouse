@@ -23,6 +23,7 @@ namespace TransfermarktDataGenerator
         public int Id { get; set; }
         public string Imię { get; set; }
         public string Nazwisko { get; set; }
+        public string pesel { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Zawodnik> Zawodnik { get; set; }

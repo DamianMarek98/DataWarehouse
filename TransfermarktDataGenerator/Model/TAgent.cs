@@ -11,5 +11,6 @@ namespace TransfermarktDataGenerator.Model
         public int Id { get; set; }
         public string Imię { get; set; }
         public string Nazwisko { get; set; }
+        public string pesel { get; set;  }
     }
 }

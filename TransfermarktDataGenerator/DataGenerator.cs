@@ -34,6 +34,7 @@ namespace TransfermarktDataGenerator
             TAgent agent =new TAgent();
             agent.Imię = generateRandomName();
             agent.Nazwisko = generateRandomSurname();
+            agent.pesel = agent.Imię.Length.ToString() + agent.Nazwisko.Length.ToString();
             return agent;
         }
 
@@ -157,11 +158,12 @@ namespace TransfermarktDataGenerator
             table.Columns.Add("Id", typeof(Int32));
             table.Columns.Add("Imię", typeof(string));
             table.Columns.Add("Nazwisko", typeof(string));
+            table.Columns.Add("pesel", typeof(string));
 
             for (int i = 0; i < n; i++)
             {
                 var agent = generateAgent();
-                table.Rows.Add(agent.Id, agent.Imię, agent.Nazwisko);
+                table.Rows.Add(agent.Id, agent.Imię, agent.Nazwisko, agent.pesel);
             }
 
             using (var bulk = new SqlBulkCopy("Server= DESKTOP-J5I9Q9P; Initial Catalog = DataWarehousesProject; integrated security=true"))
