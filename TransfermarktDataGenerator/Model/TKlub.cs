@@ -11,6 +11,6 @@ namespace TransfermarktDataGenerator.Model
         public int Id { get; set; }
         public string Nazwa { get; set; }
         public string Kraj { get; set; }
-        public Nullable<int> Budżet { get; set; }
+        public Nullable<decimal> Budżet { get; set; }
     }
 }

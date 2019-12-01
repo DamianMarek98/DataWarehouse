@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DataWarehousesProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Agent">
           <Key>
             <PropertyRef Name="Id" />
@@ -20,8 +20,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nazwa" Type="varchar" MaxLength="30" />
-          <Property Name="Kraj" Type="varchar(max)" />
-          <Property Name="Budżet" Type="int" />
+          <Property Name="Kraj" Type="varchar" MaxLength="255" />
+          <Property Name="Budżet" Type="numeric" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -42,17 +42,20 @@
           <Property Name="TypPlatnosci" Type="varchar" MaxLength="20" />
           <Property Name="KlubSprzedajacyId" Type="int" />
           <Property Name="KlubKupujacyId" Type="int" />
-          <Property Name="KwotaTransferu" Type="int" />
+          <Property Name="KwotaTransferu" Type="numeric" Precision="18" Scale="0" />
           <Property Name="ZawodnikId" Type="int" Nullable="false" />
+          <Property Name="DlugoscPobytuWKlubie" Type="varchar" MaxLength="20" />
+          <Property Name="PoprzedniTransferZaWiekszaMniejszaKwote" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="WartoscZawodnika">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="WartoscRynkowa" Type="int" />
+          <Property Name="WartoscRynkowa" Type="numeric" Precision="18" Scale="0" />
           <Property Name="DataWystawienia" Type="datetime" Nullable="false" />
           <Property Name="ZawodnikId" Type="int" />
+          <Property Name="WspolczynnikZmianyWartosci" Type="float" />
         </EntityType>
         <EntityType Name="Zawodnik">
           <Key>
@@ -171,7 +174,8 @@
             <End Role="Zawodnik" EntitySet="Zawodnik" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataWarehousesProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -182,8 +186,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Imię" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Zawodnik" Relationship="Self.FK__Zawodnik__AgentI__5CD6CB2B" FromRole="Agent" ToRole="Zawodnik" />
           <Property Name="pesel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Zawodnik" Relationship="Self.FK__Zawodnik__AgentI__5CD6CB2B" FromRole="Agent" ToRole="Zawodnik" />
         </EntityType>
         <EntityType Name="Klub">
           <Key>
@@ -191,8 +195,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nazwa" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Kraj" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Budżet" Type="Int32" />
+          <Property Name="Kraj" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Budżet" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="TransferZawodnika" Relationship="Self.FK__TransferZ__KlubK__59063A47" FromRole="Klub" ToRole="TransferZawodnika" />
           <NavigationProperty Name="TransferZawodnika1" Relationship="Self.FK__TransferZ__KlubS__5812160E" FromRole="Klub" ToRole="TransferZawodnika" />
           <NavigationProperty Name="Zawodnik" Relationship="Self.FK__Zawodnik__KlubId__5BE2A6F2" FromRole="Klub" ToRole="Zawodnik" />
@@ -216,8 +220,10 @@
           <Property Name="TypPlatnosci" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="KlubSprzedajacyId" Type="Int32" />
           <Property Name="KlubKupujacyId" Type="Int32" />
-          <Property Name="KwotaTransferu" Type="Int32" />
+          <Property Name="KwotaTransferu" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="ZawodnikId" Type="Int32" Nullable="false" />
+          <Property Name="DlugoscPobytuWKlubie" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PoprzedniTransferZaWiekszaMniejszaKwote" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Klub" Relationship="Self.FK__TransferZ__KlubK__59063A47" FromRole="TransferZawodnika" ToRole="Klub" />
           <NavigationProperty Name="Klub1" Relationship="Self.FK__TransferZ__KlubS__5812160E" FromRole="TransferZawodnika" ToRole="Klub" />
           <NavigationProperty Name="Zawodnik" Relationship="Self.FK__TransferZ__Zawod__6477ECF3" FromRole="TransferZawodnika" ToRole="Zawodnik" />
@@ -227,9 +233,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WartoscRynkowa" Type="Int32" />
+          <Property Name="WartoscRynkowa" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="DataWystawienia" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ZawodnikId" Type="Int32" />
+          <Property Name="WspolczynnikZmianyWartosci" Type="Double" />
           <NavigationProperty Name="Zawodnik" Relationship="Self.FK__WartoscZa__Zawod__6383C8BA" FromRole="WartoscZawodnika" ToRole="Zawodnik" />
         </EntityType>
         <EntityType Name="Zawodnik">
@@ -362,10 +369,10 @@
           <EntitySetMapping Name="Agent">
             <EntityTypeMapping TypeName="DataWarehousesProjectModel.Agent">
               <MappingFragment StoreEntitySet="Agent">
-                <ScalarProperty Name="pesel" ColumnName="pesel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Imię" ColumnName="Imię" />
                 <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="pesel" ColumnName="pesel" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -400,6 +407,8 @@
                 <ScalarProperty Name="KlubKupujacyId" ColumnName="KlubKupujacyId" />
                 <ScalarProperty Name="KwotaTransferu" ColumnName="KwotaTransferu" />
                 <ScalarProperty Name="ZawodnikId" ColumnName="ZawodnikId" />
+                <ScalarProperty Name="DlugoscPobytuWKlubie" ColumnName="DlugoscPobytuWKlubie" />
+                <ScalarProperty Name="PoprzedniTransferZaWiekszaMniejszaKwote" ColumnName="PoprzedniTransferZaWiekszaMniejszaKwote" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -410,6 +419,7 @@
                 <ScalarProperty Name="WartoscRynkowa" ColumnName="WartoscRynkowa" />
                 <ScalarProperty Name="DataWystawienia" ColumnName="DataWystawienia" />
                 <ScalarProperty Name="ZawodnikId" ColumnName="ZawodnikId" />
+                <ScalarProperty Name="WspolczynnikZmianyWartosci" ColumnName="WspolczynnikZmianyWartosci" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

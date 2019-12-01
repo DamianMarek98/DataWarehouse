@@ -243,7 +243,7 @@ namespace TransfermarktDataGenerator
                         var playerValuesBeforeDate = prices.Where(x => x.ZawodnikId == i && x.DataWystawienia <= time).ToList();
                         var player = playerValuesBeforeDate.OrderByDescending(x => x.DataWystawienia).First();
                         prices.Remove(player);
-                        value = generateValueBasedOnLastOne(i, time, player.WartoscRynkowa.GetValueOrDefault());
+                        value = generateValueBasedOnLastOne(i, time, (int)player.WartoscRynkowa.GetValueOrDefault());
                     }
                     else
                     {
@@ -308,19 +308,19 @@ namespace TransfermarktDataGenerator
                     
                     //works too slow 
                     var playerValuesBeforeDate = prices.Where(x => x.ZawodnikId == player.Id && x.DataWystawienia <= date).ToList();
-                    int playerValue = playerValuesBeforeDate.OrderByDescending(x => x.DataWystawienia).First().WartoscRynkowa.GetValueOrDefault();         
+                    decimal playerValue = playerValuesBeforeDate.OrderByDescending(x => x.DataWystawienia).First().WartoscRynkowa.GetValueOrDefault();         
 
                     if (playerAge < 23)
                     {
-                        price = random.Next(playerValue,2*playerValue);
+                        price = random.Next((int)playerValue,(int)(2*playerValue));
                     }
                     else if(playerAge > 32)
                     {
-                        price = random.Next(playerValue/3, playerValue);
+                        price = random.Next((int)playerValue /3, (int)playerValue);
                     }
                     else
                     {
-                        price = random.Next(playerValue/2, 3*playerValue/2);
+                        price = random.Next((int)playerValue /2, 3* (int)playerValue /2);
                     }
 
 

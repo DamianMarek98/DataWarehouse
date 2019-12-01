@@ -15,9 +15,10 @@ namespace TransfermarktDataGenerator
     public partial class WartoscZawodnika
     {
         public int Id { get; set; }
-        public Nullable<int> WartoscRynkowa { get; set; }
+        public Nullable<decimal> WartoscRynkowa { get; set; }
         public System.DateTime DataWystawienia { get; set; }
         public Nullable<int> ZawodnikId { get; set; }
+        public Nullable<double> WspolczynnikZmianyWartosci { get; set; }
     
         public virtual Zawodnik Zawodnik { get; set; }
     }

@@ -25,7 +25,7 @@ namespace TransfermarktDataGenerator
         public int Id { get; set; }
         public string Nazwa { get; set; }
         public string Kraj { get; set; }
-        public Nullable<int> Budżet { get; set; }
+        public Nullable<decimal> Budżet { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferZawodnika> TransferZawodnika { get; set; }

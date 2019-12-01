@@ -19,8 +19,10 @@ namespace TransfermarktDataGenerator
         public string TypPlatnosci { get; set; }
         public Nullable<int> KlubSprzedajacyId { get; set; }
         public Nullable<int> KlubKupujacyId { get; set; }
-        public Nullable<int> KwotaTransferu { get; set; }
+        public Nullable<decimal> KwotaTransferu { get; set; }
         public int ZawodnikId { get; set; }
+        public string DlugoscPobytuWKlubie { get; set; }
+        public string PoprzedniTransferZaWiekszaMniejszaKwote { get; set; }
     
         public virtual Klub Klub { get; set; }
         public virtual Klub Klub1 { get; set; }
